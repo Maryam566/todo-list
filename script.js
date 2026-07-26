@@ -6,6 +6,9 @@ let button = document.querySelector(".btn")
 let list = document.querySelector(".list")
 let counter=document.querySelector(".counter")
 let priority=document.querySelector(".priority")
+let splash=document.querySelector(".splash")
+let startBtn = document.querySelector(".start-btn")
+let card = document.querySelector(".card")
 
 button.addEventListener("click", function(){
 
@@ -110,6 +113,13 @@ button.click();
 
 }
 
+
+});
+startBtn.addEventListener("click", function(){
+
+    splash.classList.add("hide");
+
+    card.classList.remove("hide");
 
 });
 
