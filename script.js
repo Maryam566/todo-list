@@ -9,12 +9,17 @@ let priority=document.querySelector(".priority")
 let splash=document.querySelector(".splash")
 let startBtn = document.querySelector(".start-btn")
 let card = document.querySelector(".card")
+let errorMessage = document.querySelector(".error-message");
+
 
 button.addEventListener("click", function(){
 
 
 if(input.value.trim()==""){
-   alert("Enter a task")
+     input.style.border = "2px solid red";
+   errorMessage.textContent = "Please enter a task.";
+
+   return;
 }
 
 else if(editing){
@@ -31,6 +36,8 @@ else {
 }
 
    currentTask.textContent =input.value.trim();
+   input.style.border = "1px solid gray";
+errorMessage.textContent = "";
 
    editing = false;
    button.textContent = "Add";
@@ -41,28 +48,36 @@ else {
 else{
 
 let li = document.createElement("li")
+let circle = document.createElement("span");
+circle.classList.add("priority-circle");
+let left = document.createElement("div");
+left.classList.add("left");
 let task = document.createElement("span")
+let actions = document.createElement("div");
+actions.classList.add("actions");
+
 let selectedPriority = priority.value;
 if (selectedPriority == "High") {
- task.style.color ="red";
+  circle.style.backgroundColor = "red";
 }
 else if (selectedPriority == "Medium") {
- task.style.color ="orange";
+circle.style.backgroundColor ="orange";
 }
 else {
- task.style.color ="green";
+ circle.style.backgroundColor ="green";
 
 }
 task.textContent = input.value.trim();
 task.addEventListener("click",function(){
    task.classList.toggle("completed");
 })
+left.appendChild(circle);
+left.appendChild(task);
 
-li.appendChild(task);
-
+li.appendChild(left);
 
 let del = document.createElement("button")
-del.textContent = "Delete";
+del.innerHTML = '<i class="fa-solid fa-trash"></i>';
 
 
 del.addEventListener("click", function(){
@@ -82,7 +97,7 @@ if(confirm("Are you sure")){
 
 
 let edit = document.createElement("button")
-edit.textContent = "Edit";
+edit.innerHTML = '<i class="fa-solid fa-pen"></i>';
 
 
 edit.addEventListener("click", function(){
@@ -94,13 +109,14 @@ edit.addEventListener("click", function(){
    button.textContent = "Update";
 
 });
+actions.appendChild(edit);
+actions.appendChild(del);
 
-
-li.appendChild(del);
-li.appendChild(edit);
-
+li.appendChild(actions);
 list.appendChild(li);
 counter.textContent = "Total Tasks: " + list.children.length;
+input.style.border = "1px solid gray";
+errorMessage.textContent = "";
 
 input.value = "";
 
@@ -115,6 +131,12 @@ button.click();
 
 
 });
+input.addEventListener("input", function(){
+
+    input.style.border = "1px solid gray";
+    errorMessage.textContent = "";
+
+});
 startBtn.addEventListener("click", function(){
 
     splash.classList.add("hide");
@@ -122,4 +144,5 @@ startBtn.addEventListener("click", function(){
     card.classList.remove("hide");
 
 });
+
 
