@@ -123,14 +123,6 @@ input.value = "";
 }
 
 });
-input.addEventListener("keydown", function(e){
-if(e.key=="Enter"){
-button.click();
-
-}
-
-
-});
 input.addEventListener("input", function(){
 
     input.style.border = "1px solid gray";
