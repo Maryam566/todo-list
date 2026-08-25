@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 let editing = false;
 let currentTask = null;
 let currentTaskId = null;
@@ -453,7 +452,6 @@ function showDeleteConfirmation(li, taskId) {
 // =============================
 
 loadTodos();
-=======
 let editing = false;
 let currentTask = null;
 
@@ -594,4 +592,5 @@ startBtn.addEventListener("click", function(){
 });
 
 
->>>>>>> 507aecfe60e924b6b20008bbc25a389d6c0a65f8
+
+
