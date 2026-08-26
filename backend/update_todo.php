@@ -14,9 +14,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    $todo = new Todo($connection);
+    $todo = new Todo($connection , $id , $task , $priority);
 
-    $result = $todo->updateTask($id, $task, $priority);
+    $result = $todo->save();
 
     if ($result) {
         echo "Task updated successfully";

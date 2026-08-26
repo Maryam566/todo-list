@@ -3,9 +3,9 @@
 require_once "db.php";
 require_once "Todo.php";
 
-$todo = new Todo($connection);
+$todo = new Todo($connection, "", "", "");
 
-$result = $todo->getTasks();
+$result = $todo->get();
 
 $todos = [];
 

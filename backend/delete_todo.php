@@ -12,9 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    $todo = new Todo($connection);
+    $todo = new Todo($connection , $id , "" ,"");
 
-    $result = $todo->deleteTask($id);
+    $result = $todo->delete();
 
     if ($result) {
         echo "Task deleted successfully";
