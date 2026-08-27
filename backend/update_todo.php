@@ -1,7 +1,6 @@
 <?php
 
-require_once "db.php";
-require_once "Todo.php";
+require_once "Loader.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -14,7 +13,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    $todo = new Todo($connection , $id , $task , $priority);
+    $todo = Todo::find($id);
+
+    if (!$todo->id) {
+        echo "Task not found";
+        exit;
+    }
+
+    $todo->task = $task;
+    $todo->priority = $priority;
 
     $result = $todo->save();
 

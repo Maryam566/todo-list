@@ -1,27 +1,24 @@
 <?php
 
-require_once "db.php";
-require_once "Todo.php";
+require_once "Loader.php";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+$task = $_POST["task"] ?? "";
+$priority = $_POST["priority"] ?? "";
 
-    $task = $_POST["task"] ?? "";
-    $priority = $_POST["priority"] ?? "Low";
+if (empty($task) || empty($priority)) {
+    echo "Task and priority are required";
+    exit;
+}
 
-    if (empty(trim($task))) {
-        echo "Task is required";
-        exit;
-    }
+$todo = new Todo();
 
-    $todo = new Todo($connection, null , $task , $priority);
+$todo->task = $task;
+$todo->priority = $priority;
 
-    $result = $todo->save();
-
-    if ($result) {
-        echo "Task added successfully";
-    } else {
-        echo "Unable to add task";
-    }
+if ($todo->save()) {
+    echo "Task added successfully";
+} else {
+    echo "Unable to add task";
 }
 
 ?>

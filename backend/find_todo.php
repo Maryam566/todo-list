@@ -1,7 +1,6 @@
 <?php
 
-require_once "db.php";
-require_once "todo.php";
+require_once "Loader.php";
 
 header("Content-Type: application/json");
 
@@ -15,23 +14,16 @@ if (empty($id)) {
     exit;
 }
 
-$todo = new Todo($connection, $id, "", "");
+$todo = Todo::find($id);
 
-$result = $todo->find();
-
-if (mysqli_num_rows($result) > 0) {
-
-    $row = mysqli_fetch_assoc($result);
-
+if ($todo->id) {
     echo json_encode([
         "success" => true,
-        "id" => $row["id"],
-        "task" => $row["task"],
-        "priority" => $row["priority"]
+        "id" => $todo->id,
+        "task" => $todo->task,
+        "priority" => $todo->priority
     ]);
-
 } else {
-
     echo json_encode([
         "success" => false,
         "message" => "Task not found"

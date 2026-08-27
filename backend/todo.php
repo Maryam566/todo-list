@@ -2,89 +2,126 @@
 
 class Todo
 {
-    private $connection;
-    private $id;
-    private $task;
-    private $priority;
+    private $table = "todos";
 
-    public function __construct($connection, $id, $task, $priority)
+    public $id;
+    public $task;
+    public $priority;
+
+    public function __construct()
     {
-        $this->connection = $connection;
-        $this->id = $id;
-        $this->task = $task;
-        $this->priority = $priority;
     }
 
     public function save()
     {
-        if (empty($this->id)) {
-
-            $sql = "INSERT INTO todos (task, priority) VALUES (?, ?)";
-
-            $stmt = mysqli_prepare($this->connection, $sql);
-
-            mysqli_stmt_bind_param(
-                $stmt,
-                "ss",
-                $this->task,
-                $this->priority
-            );
-
-            mysqli_stmt_execute($stmt);
-
-            $this->id = mysqli_insert_id($this->connection);
-
-            return true;
-
-        } else {
-
-            $sql = "UPDATE todos SET task = ?, priority = ? WHERE id = ?";
-
-            $stmt = mysqli_prepare($this->connection, $sql);
-
-            mysqli_stmt_bind_param(
-                $stmt,
-                "ssi",
-                $this->task,
-                $this->priority,
-                $this->id
-            );
-
-            return mysqli_stmt_execute($stmt);
+        if ($this->id) {
+            return $this->update();
         }
+
+        return $this->create();
     }
 
-    public function get()
+    private function update()
     {
-        $sql = "SELECT id, task, priority FROM todos";
+        $connection = new Connection();
 
-        $result = mysqli_query($this->connection, $sql);
+        $sql = "UPDATE todos SET task = ?, priority = ? WHERE id = ?";
 
-        return $result;
+        $stmt = mysqli_prepare($connection->connection, $sql);
+
+        mysqli_stmt_bind_param(
+            $stmt,
+            "ssi",
+            $this->task,
+            $this->priority,
+            $this->id
+        );
+
+        return mysqli_stmt_execute($stmt);
     }
 
-    public function find()
+    private function create()
     {
-        $sql = "SELECT id, task, priority FROM todos WHERE id = ?";
+        $connection = new Connection();
 
-        $stmt = mysqli_prepare($this->connection, $sql);
+        $sql = "INSERT INTO todos (task, priority) VALUES (?, ?)";
 
-        mysqli_stmt_bind_param($stmt, "i", $this->id);
+        $stmt = mysqli_prepare($connection->connection, $sql);
+
+        mysqli_stmt_bind_param(
+            $stmt,
+            "ss",
+            $this->task,
+            $this->priority
+        );
 
         mysqli_stmt_execute($stmt);
 
-        $result = mysqli_stmt_get_result($stmt);
+        $this->id = mysqli_insert_id($connection->connection);
 
-        return $result;
+        return true;
+    }
+
+    public static function all()
+    {
+        $connection = new Connection();
+
+        $sql = "SELECT * FROM todos";
+
+        $result = mysqli_query($connection->connection, $sql);
+
+        $todos = [];
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $todo = new self;
+
+            $todo->fill($row);
+
+            $todos[] = $todo;
+        }
+
+        return $todos;
+    }
+
+    private function fill($row)
+    {
+        $this->id = $row['id'];
+        $this->task = $row['task'];
+        $this->priority = $row['priority'];
+    }
+
+    public static function find($id)
+    {
+        $connection = new Connection();
+
+        $sql = "SELECT * FROM todos WHERE id = " . $id;
+
+        $result = mysqli_query($connection->connection, $sql);
+
+        $row = mysqli_fetch_assoc($result);
+
+        $todo = new self;
+
+        if ($row) {
+            $todo->fill($row);
+        }
+
+        return $todo;
     }
 
     public function delete()
     {
+        $connection = new Connection();
+
         $sql = "DELETE FROM todos WHERE id = ?";
 
-        $stmt = mysqli_prepare($this->connection, $sql);
+        $stmt = mysqli_prepare($connection->connection, $sql);
 
-        mysqli_stmt_bind_param($stmt, "i", $this->id);
+        mysqli_stmt_bind_param(
+            $stmt,
+            "i",
+            $this->id
+        );
 
         return mysqli_stmt_execute($stmt);
     }
