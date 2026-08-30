@@ -23,9 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $todo->task = $task;
     $todo->priority = $priority;
 
-    $result = $todo->save();
-
-    if ($result) {
+    if ($todo->save()) {
         echo "Task updated successfully";
     } else {
         echo "Unable to update task";

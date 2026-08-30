@@ -7,6 +7,7 @@ class Todo
     public $id;
     public $task;
     public $priority;
+    public $file;
 
     public function __construct()
     {
@@ -20,39 +21,39 @@ class Todo
 
         return $this->create();
     }
+private function update()
+{
+    $connection = new Connection();
 
-    private function update()
-    {
-        $connection = new Connection();
+    $sql = "UPDATE todos SET task = ?, priority = ? WHERE id = ?";
 
-        $sql = "UPDATE todos SET task = ?, priority = ? WHERE id = ?";
+    $stmt = mysqli_prepare($connection->connection, $sql);
 
-        $stmt = mysqli_prepare($connection->connection, $sql);
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ssi",
+        $this->task,
+        $this->priority,
+        $this->id
+    );
 
-        mysqli_stmt_bind_param(
-            $stmt,
-            "ssi",
-            $this->task,
-            $this->priority,
-            $this->id
-        );
-
-        return mysqli_stmt_execute($stmt);
-    }
+    return mysqli_stmt_execute($stmt);
+}
 
     private function create()
     {
         $connection = new Connection();
 
-        $sql = "INSERT INTO todos (task, priority) VALUES (?, ?)";
+        $sql = "INSERT INTO todos (task, priority, file) VALUES (?, ?, ?)";
 
         $stmt = mysqli_prepare($connection->connection, $sql);
 
         mysqli_stmt_bind_param(
             $stmt,
-            "ss",
+            "sss",
             $this->task,
-            $this->priority
+            $this->priority,
+            $this->file
         );
 
         mysqli_stmt_execute($stmt);
@@ -88,6 +89,7 @@ class Todo
         $this->id = $row['id'];
         $this->task = $row['task'];
         $this->priority = $row['priority'];
+        $this->file = $row['file'];
     }
 
     public static function find($id)

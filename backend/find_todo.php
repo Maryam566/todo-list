@@ -17,12 +17,13 @@ if (empty($id)) {
 $todo = Todo::find($id);
 
 if ($todo->id) {
-    echo json_encode([
-        "success" => true,
-        "id" => $todo->id,
-        "task" => $todo->task,
-        "priority" => $todo->priority
-    ]);
+  echo json_encode([
+    "success" => true,
+    "id" => $todo->id,
+    "task" => $todo->task,
+    "priority" => $todo->priority,
+    "file" => $todo->file
+]);
 } else {
     echo json_encode([
         "success" => false,

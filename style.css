@@ -335,3 +335,41 @@ body {
   text-align: center;
   margin: 5px 0 0 0;
 }
+.file-section {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-top: 30px !important;
+  margin-bottom: 20px !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+.file {
+  display: block;
+  width: 320px;
+  height: 42px;
+  padding: 5px 8px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+.file::file-selector-button {
+  padding: 6px 12px;
+  margin-right: 10px;
+  background: #f1f5f9;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.file::file-selector-button:hover {
+  background: #e2e8f0;
+}
